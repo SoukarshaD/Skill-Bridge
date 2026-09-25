@@ -72,10 +72,7 @@ export default function IndustryOpportunities() {
                       </div>
                     </div>
                     
-                    <div className="flex justify-between items-center mt-4">
-                      <Link href={`/industry/opportunities/${opp.id}/applicants`}>
-                        <Button variant="outline">View Applicants</Button>
-                      </Link>
+                    <div className="flex justify-end items-center mt-4">
                       <Button variant="ghost" size="sm">Edit</Button>
                     </div>
                   </CardContent>

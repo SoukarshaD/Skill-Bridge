@@ -49,17 +49,17 @@ export default function IndustryCollaborations() {
         <main className="flex-1 container mx-auto px-4 md:px-8 py-8 max-w-7xl">
           <div className="mb-8">
             <h1 className="text-3xl font-bold tracking-tight text-foreground">
-              Incoming Proposals
+              Industry Validation & Curriculum Alignment
             </h1>
             <p className="text-muted-foreground mt-1 text-base">
-              Review and manage collaboration requests from academic partners.
+              Review curriculum alignment proposals and validate training requirements.
             </p>
           </div>
 
           <Card className="shadow-sm border-border/50">
             <CardHeader>
-              <CardTitle className="text-lg">Proposals & Active Collaborations</CardTitle>
-              <CardDescription>Review research, consultancy, and training proposals sent to your organization.</CardDescription>
+              <CardTitle className="text-lg">Curriculum Review & Active Joint Training</CardTitle>
+              <CardDescription>Review curriculum redesign, skill-development, and joint training proposals sent to your organization.</CardDescription>
             </CardHeader>
             <CardContent>
               {isLoading ? (

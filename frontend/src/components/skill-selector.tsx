@@ -27,6 +27,7 @@ interface SkillSelectorProps {
 export function SkillSelector({ initialSkills = [], onSkillsChange }: SkillSelectorProps) {
   const [allSkills, setAllSkills] = useState<Skill[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
 
   useEffect(() => {
     const fetchSkills = async () => {
@@ -71,11 +72,13 @@ export function SkillSelector({ initialSkills = [], onSkillsChange }: SkillSelec
     onSkillsChange(newSelection);
   };
 
-  const filteredSkills = allSkills.filter(
-    (s) => 
-      s.name.toLowerCase().includes(searchTerm.toLowerCase()) && 
-      !initialSkills.some((sel) => sel.skillId === s.id)
-  );
+  const filteredSkills = searchTerm 
+    ? allSkills.filter(
+        (s) => 
+          s.name.toLowerCase().includes(searchTerm.toLowerCase()) && 
+          !initialSkills.some((sel) => sel.skillId === s.id)
+      )
+    : allSkills.filter((s) => !initialSkills.some((sel) => sel.skillId === s.id)).slice(0, 20); // Show top 20 by default
 
   return (
     <div className="space-y-4">
@@ -85,6 +88,8 @@ export function SkillSelector({ initialSkills = [], onSkillsChange }: SkillSelec
           placeholder="e.g. Python, SQL..." 
           value={searchTerm} 
           onChange={(e) => setSearchTerm(e.target.value)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setTimeout(() => setIsFocused(false), 200)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
@@ -97,7 +102,7 @@ export function SkillSelector({ initialSkills = [], onSkillsChange }: SkillSelec
             }
           }}
         />
-        {searchTerm && filteredSkills.length > 0 && (
+        {isFocused && filteredSkills.length > 0 && (
           <div className="border rounded-md max-h-40 overflow-y-auto bg-background p-1 space-y-1 mt-1 shadow-sm">
             {filteredSkills.map((skill) => (
               <div 

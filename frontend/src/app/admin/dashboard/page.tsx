@@ -13,16 +13,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { api } from "@/lib/api";
 import { GraduationCap, Briefcase, FileText, CheckCircle2, Users } from "lucide-react";
 
-interface FunnelData {
-  stage: string;
-  count: number;
-}
-
-interface OutcomeData {
-  department: string;
-  offered: number;
-  accepted: number;
-}
 
 interface DemandData {
   skillName: string;
@@ -43,8 +33,6 @@ interface ReadinessData {
 }
 
 export default function AdminDashboardPage() {
-  const [funnelData, setFunnelData] = useState<FunnelData[]>([]);
-  const [outcomesData, setOutcomesData] = useState<OutcomeData[]>([]);
   const [demandData, setDemandData] = useState<DemandData[]>([]);
   const [skillGapsData, setSkillGapsData] = useState<SkillGapData[]>([]);
   const [readinessData, setReadinessData] = useState<ReadinessData | null>(null);
@@ -57,24 +45,14 @@ export default function AdminDashboardPage() {
     const fetchDashboardData = async () => {
       setLoading(true);
       try {
-        const [f, o, d, gaps, ready, acad] = await Promise.all([
-          api.get<any>("/analytics/institution/funnel"),
-          api.get<any>("/analytics/institution/outcomes"),
+        const [d, gaps, ready, acad] = await Promise.all([
           api.get<any>(`/analytics/institution/demand?scope=${demandScope}`),
           api.get<any>("/analytics/institution/skill-gaps"),
           api.get<any>("/analytics/institution/readiness"),
           api.get<any>("/analytics/institution/academicians"),
         ]);
 
-        setFunnelData([
-          { stage: "Applied", count: f.APPLIED },
-          { stage: "Shortlisted", count: f.SHORTLISTED },
-          { stage: "Interview", count: f.INTERVIEW },
-          { stage: "Offered", count: f.OFFERED },
-          { stage: "Accepted", count: f.ACCEPTED },
-        ]);
 
-        setOutcomesData(o);
         setDemandData(d);
         setSkillGapsData(gaps);
         setReadinessData(ready);
@@ -142,7 +120,7 @@ export default function AdminDashboardPage() {
           <div className="mb-8">
             <h1 className="text-3xl font-bold tracking-tight text-foreground">Institution Analytics</h1>
             <p className="text-muted-foreground mt-2 text-base">
-              Real-time insights into student readiness, skill gaps, and placement outcomes.
+              Real-time insights into student readiness, skill gaps, and industry alignment.
             </p>
           </div>
 
@@ -150,7 +128,7 @@ export default function AdminDashboardPage() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5 mb-8">
             <Card className="shadow-sm border-border/50">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Placement Readiness</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">Industry Readiness</CardTitle>
                 <GraduationCap className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -162,36 +140,7 @@ export default function AdminDashboardPage() {
                 </p>
               </CardContent>
             </Card>
-            
-            <Card className="shadow-sm border-border/50 bg-green-500/5 border-green-500/20">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-green-700 dark:text-green-500">Accepted Offers</CardTitle>
-                <CheckCircle2 className="h-4 w-4 text-green-700 dark:text-green-500" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-green-700 dark:text-green-500">
-                  {loading ? "-" : funnelData.find(f => f.stage === "Accepted")?.count || 0}
-                </div>
-                <p className="text-xs text-green-700/70 dark:text-green-500/70 mt-1">
-                  Successfully placed students
-                </p>
-              </CardContent>
-            </Card>
 
-            <Card className="shadow-sm border-border/50">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Total Applications</CardTitle>
-                <FileText className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {loading ? "-" : funnelData.find(f => f.stage === "Applied")?.count || 0}
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  All-time student submissions
-                </p>
-              </CardContent>
-            </Card>
 
             <Card className="shadow-sm border-border/50">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -222,58 +171,6 @@ export default function AdminDashboardPage() {
                 <p className="text-xs text-muted-foreground mt-1">
                   Collaborations & Program participations
                 </p>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2 mb-6">
-            {/* Funnel */}
-            <Card className="shadow-sm border-border/50">
-              <CardHeader>
-                <CardTitle className="text-lg">Placement Funnel</CardTitle>
-                <CardDescription>Pipeline conversion across all applications</CardDescription>
-              </CardHeader>
-              <CardContent className="h-[300px] pb-4">
-                {loading ? (
-                  <div className="h-full flex items-center justify-center text-muted-foreground animate-pulse">Loading...</div>
-                ) : (
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={funnelData} layout="vertical" margin={{ top: 0, right: 30, left: 10, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="hsl(var(--border))" opacity={0.5} />
-                      <XAxis type="number" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} axisLine={false} tickLine={false} />
-                      <YAxis dataKey="stage" type="category" width={85} tick={{ fill: 'hsl(var(--foreground))', fontSize: 13, fontWeight: 500 }} axisLine={false} tickLine={false} />
-                      <Tooltip content={<CustomTooltip />} cursor={{ fill: 'hsl(var(--muted))', opacity: 0.4 }} />
-                      <Bar dataKey="count" fill={CHART_COLORS[0]} radius={[0, 4, 4, 0]} maxBarSize={40} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Department Outcomes */}
-            <Card className="shadow-sm border-border/50">
-              <CardHeader>
-                <CardTitle className="text-lg">Department Outcomes</CardTitle>
-                <CardDescription>Offers vs Acceptances by department</CardDescription>
-              </CardHeader>
-              <CardContent className="h-[300px] pb-4">
-                {loading ? (
-                  <div className="h-full flex items-center justify-center text-muted-foreground animate-pulse">Loading...</div>
-                ) : outcomesData.length === 0 ? (
-                  <div className="flex h-full items-center justify-center text-muted-foreground text-sm">No outcomes recorded yet.</div>
-                ) : (
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={outcomesData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" opacity={0.5} />
-                      <XAxis dataKey="department" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} axisLine={false} tickLine={false} dy={10} />
-                      <YAxis tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} axisLine={false} tickLine={false} />
-                      <Tooltip content={<CustomTooltip />} cursor={{ fill: 'hsl(var(--muted))', opacity: 0.4 }} />
-                      <Legend wrapperStyle={{ paddingTop: '10px', fontSize: '12px' }} iconType="circle" />
-                      <Bar dataKey="offered" name="Offered" fill={OFFERED_COLOR} radius={[4, 4, 0, 0]} maxBarSize={30} />
-                      <Bar dataKey="accepted" name="Accepted" fill={ACCEPTED_COLOR} radius={[4, 4, 0, 0]} maxBarSize={30} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                )}
               </CardContent>
             </Card>
           </div>

@@ -78,10 +78,10 @@ export default function NewCollaborationProposal() {
         <main className="flex-1 container mx-auto px-4 md:px-8 py-8 max-w-3xl">
           <div className="mb-8">
             <h1 className="text-3xl font-bold tracking-tight text-foreground">
-              Propose Collaboration
+              Propose Curriculum Alignment / Joint Training
             </h1>
             <p className="text-muted-foreground mt-1 text-base">
-              Submit a formal proposal for research, consultancy, or training to an industry partner.
+              Submit a formal proposal for curriculum review, joint training, or skill-development to an industry partner.
             </p>
           </div>
 
@@ -171,7 +171,7 @@ export default function NewCollaborationProposal() {
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="expertise">Relevant Expertise (Comma separated)</Label>
+                    <Label htmlFor="expertise">Target Skills (Comma separated)</Label>
                     <Input 
                       id="expertise" 
                       placeholder="e.g. Machine Learning, Python, Operations Research"

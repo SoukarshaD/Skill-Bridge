@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import request from 'supertest';
-import app from '../app';
+import { createApp } from '../app';
 import { prisma } from '../config/database';
 
 vi.mock('../config/database', () => ({
@@ -48,6 +48,8 @@ vi.mock('../middleware/auth.middleware', () => ({
     next();
   }
 }));
+
+const app = createApp();
 
 describe('Career Guidance API', () => {
   beforeEach(() => {

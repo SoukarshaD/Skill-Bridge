@@ -319,9 +319,9 @@ export class ProgramsService {
     }
 
     recommendations.sort((a, b) => {
-      const aScore = a.match?.overallMatchPercentage ?? -1;
-      const bScore = b.match?.overallMatchPercentage ?? -1;
-      return bScore - aScore;
+      const aGaps = a.match?.missingSkills?.length || 0;
+      const bGaps = b.match?.missingSkills?.length || 0;
+      return bGaps - aGaps;
     });
 
     return recommendations;

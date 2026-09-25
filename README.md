@@ -142,27 +142,21 @@ Industries can use SKIL BRIDGE to connect with relevant students and academician
 
 Talent Discovery
 
-Create opportunities
+Create skill-development opportunities
 
-Define required skills
+Define required skill profiles
 
 Specify proficiency requirements
 
-Skill-based applicant ranking
+Skill-based participant matching
 
-Applicant management
-
-Recruitment
+Application management
 
 Application tracking
 
-Shortlisting
+Participant selection
 
-Interview workflow
-
-Offer management
-
-Acceptance/rejection tracking
+Offer and acceptance tracking
 
 Industry Programs
 
@@ -234,13 +228,11 @@ Student skill gaps
 
 Industry skill demand
 
-Internship participation
+Internship and apprenticeship participation
 
-Placement readiness
+Skill readiness (alignment with current demand)
 
 Opportunity applications
-
-Internship outcomes
 
 Certifications
 

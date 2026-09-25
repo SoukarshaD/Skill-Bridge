@@ -38,7 +38,7 @@ export default function IndustryInternshipsPage() {
           <div className="flex justify-between items-center mb-8">
             <div>
               <h1 className="text-3xl font-bold tracking-tight">Active Internships</h1>
-              <p className="text-muted-foreground mt-1">Manage ongoing internships and track intern progress.</p>
+              <p className="text-muted-foreground mt-1">Skill-development placements and apprenticeships managed by your organisation.</p>
             </div>
           </div>
 
@@ -48,7 +48,7 @@ export default function IndustryInternshipsPage() {
                 <Briefcase className="w-12 h-12 text-muted-foreground mb-4" />
                 <h3 className="text-lg font-medium">No Active Internships</h3>
                 <p className="text-muted-foreground text-sm max-w-sm text-center mb-6">
-                  You don't have any ongoing internships. Accept applicants in your opportunity dashboard and click "Start Internship".
+                  You don't have any ongoing internships. Create an internship opportunity and select participants to begin.
                 </p>
                 <Link href="/industry/opportunities">
                   <Button>View Opportunities</Button>
@@ -71,17 +71,14 @@ export default function IndustryInternshipsPage() {
                   </CardHeader>
                   <CardContent className="flex-1">
                     <div className="space-y-2 mt-4">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Milestones:</span>
-                        <span className="font-medium">
-                          {internship.milestones.filter((m:any) => m.status === 'COMPLETED').length} / {internship.milestones.length}
-                        </span>
-                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        This applicant has been accepted and moved to active status.
+                      </p>
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <Link href={`/industry/internships/${internship.id}`} className="w-full">
-                      <Button className="w-full">Open Workspace</Button>
+                    <Link href={`/industry/opportunities/${internship.opportunityId}`} className="w-full">
+                      <Button className="w-full">View Opportunity</Button>
                     </Link>
                   </CardFooter>
                 </Card>

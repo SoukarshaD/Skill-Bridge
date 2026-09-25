@@ -15,6 +15,7 @@ router.use(requireAuth);
 router.get("/profile", getProfile);
 
 router.put("/profile/student", requireRole(["STUDENT"]), updateStudentProfile);
+
 router.post("/profile/student/skills", requireRole(["STUDENT"]), updateStudentSkills);
 
 router.put("/profile/academician", requireRole(["ACADEMICIAN"]), updateAcademicProfile);

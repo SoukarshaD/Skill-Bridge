@@ -67,7 +67,7 @@ export default function CareerPathwayPage() {
     <div className="container mx-auto py-8 px-4 max-w-5xl space-y-8">
       <div>
         <Link href="/student/career" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4">
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Recommendations
+          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Pathways
         </Link>
         <div className="flex flex-col md:flex-row justify-between items-start gap-4">
           <div>
@@ -77,7 +77,7 @@ export default function CareerPathwayPage() {
           </div>
           <Card className="w-full md:w-64 shrink-0 bg-primary/5 border-primary/20">
             <CardContent className="p-4 text-center">
-              <p className="text-sm font-medium text-muted-foreground mb-2">Career Readiness</p>
+              <p className="text-sm font-medium text-muted-foreground mb-2">Industry Alignment</p>
               <div className="text-4xl font-bold text-primary mb-2">{readinessPercentage}%</div>
               <Progress value={readinessPercentage} className="h-2" />
             </CardContent>
@@ -170,7 +170,7 @@ export default function CareerPathwayPage() {
           <CardTitle className="flex items-center gap-2">
             <Briefcase className="h-5 w-5" /> Relevant Opportunities
           </CardTitle>
-          <CardDescription>Internships, jobs, and challenges matching this career.</CardDescription>
+          <CardDescription>Practical training, internships, and skill-development programs matching this career.</CardDescription>
         </CardHeader>
         <CardContent>
           {relevantOpportunities.length === 0 ? (

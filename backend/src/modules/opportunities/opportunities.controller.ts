@@ -142,79 +142,7 @@ export const getStudentRecommendations = async (req: Request, res: Response, nex
   }
 };
 
-export const getRankedApplicants = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  try {
-    const opportunityId = String(req.params.id);
-    const userId = (req as any).user.id;
 
-    const opportunity = await prisma.opportunity.findUnique({
-      where: { id: opportunityId },
-      include: {
-        requiredSkills: {
-          include: { skill: true }
-        },
-        organization: true,
-        applications: {
-          include: {
-            student: {
-              include: {
-                studentProfile: {
-                  include: {
-                    studentSkills: {
-                      include: { skill: true }
-                    }
-                  }
-                },
-                academicProfile: true
-              }
-            }
-          }
-        }
-      }
-    });
-
-    if (!opportunity) {
-      res.status(404).json({ error: "Opportunity not found" });
-      return;
-    }
-
-    const user = await prisma.user.findUnique({ where: { id: userId } });
-    if (user?.role !== 'ADMIN' && opportunity.organizationId !== user?.organizationId) {
-      res.status(403).json({ error: "Unauthorized access to applicants" });
-      return;
-    }
-
-    const rankedApplicants = opportunity.applications.map((app) => {
-      let matchResult = null;
-      if (app.student.studentProfile) {
-        matchResult = calculateMatchScore(
-          app.student.studentProfile.studentSkills,
-          opportunity.requiredSkills
-        );
-      }
-
-      return {
-        applicationId: app.id,
-        studentId: app.student.id,
-        name: app.student.name,
-        email: app.student.email,
-        status: app.status,
-        match: matchResult,
-        academicProfile: app.student.academicProfile
-      };
-    });
-
-    rankedApplicants.sort((a, b) => {
-      const aScore = a.match?.overallMatchPercentage ?? -1;
-      const bScore = b.match?.overallMatchPercentage ?? -1;
-      return bScore - aScore;
-    });
-
-    res.status(200).json({ applicants: rankedApplicants });
-  } catch (error) {
-    next(error);
-  }
-};
 
 export const getAllPublishedOpportunities = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {

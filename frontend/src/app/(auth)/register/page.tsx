@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
@@ -39,6 +39,7 @@ export default function RegisterPage() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -56,20 +57,24 @@ export default function RegisterPage() {
       
       login(result.user);
       router.push(`/${result.user.role.toLowerCase()}/dashboard`);
-    } catch (_err) {
-      setError("An unexpected error occurred. Please try again.");
+    } catch (_err: any) {
+      if (_err.errors && Array.isArray(_err.errors) && _err.errors.length > 0) {
+        setError(_err.errors[0].message || "Registration failed. Please check your inputs.");
+      } else {
+        setError(_err.message || "An unexpected error occurred. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-muted/40">
-      <Card className="w-full max-w-md my-8">
+    <div className="flex min-h-screen w-full items-center justify-center bg-muted/40 py-10 px-4">
+      <Card className="w-full max-w-lg my-8 shadow-lg">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Register</CardTitle>
+          <CardTitle className="text-2xl font-bold">Create your Skill Bridge account</CardTitle>
           <CardDescription>
-            Create an account to join the Academia-Industry Portal
+            Join Skill Bridge — Setu-Kaushal
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -111,18 +116,40 @@ export default function RegisterPage() {
                 </p>
               )}
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="role">I am a</Label>
-              <select
-                id="role"
-                {...register("role")}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <option value="STUDENT">Student</option>
-                <option value="ACADEMICIAN">Academician</option>
-                <option value="INDUSTRY">Industry Professional</option>
-                <option value="ADMIN">Institution Admin</option>
-              </select>
+            <div className="space-y-3">
+              <Label>Choose your role</Label>
+              <p className="text-xs text-muted-foreground mb-4">Your role determines the dashboards and tools available to you.</p>
+              
+              <Controller
+                control={control}
+                name="role"
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <SelectTrigger className="w-full h-auto py-3">
+                      <SelectValue placeholder="Select a role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="ACADEMICIAN" className="py-3 cursor-pointer items-start">
+                        <div className="font-medium text-left">Training Provider</div>
+                        <div className="text-xs text-muted-foreground text-left mt-1 whitespace-normal">Manage training programs, skill gaps and curriculum alignment.</div>
+                      </SelectItem>
+                      <SelectItem value="INDUSTRY" className="py-3 cursor-pointer items-start">
+                        <div className="font-medium text-left">Industry / Employer</div>
+                        <div className="text-xs text-muted-foreground text-left mt-1 whitespace-normal">Share industry demand and validate skills and training programs.</div>
+                      </SelectItem>
+                      <SelectItem value="ADMIN" className="py-3 cursor-pointer items-start">
+                        <div className="font-medium text-left">Government / Scheme Administrator</div>
+                        <div className="text-xs text-muted-foreground text-left mt-1 whitespace-normal">Analyze district intelligence and generate evidence-based training plans.</div>
+                      </SelectItem>
+                      <SelectItem value="STUDENT" className="py-3 cursor-pointer items-start">
+                        <div className="font-medium text-left">Trainee / Candidate</div>
+                        <div className="text-xs text-muted-foreground text-left mt-1 whitespace-normal">Explore skills, training programs and career information.</div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+
               {errors.role && (
                 <p className="text-sm text-destructive">{errors.role.message}</p>
               )}

@@ -24,8 +24,8 @@ export default function IndustryDashboard() {
   const { user } = useAuth();
   const [stats, setStats] = useState({
     activePostings: 0,
-    totalApplicants: 0,
-    newApplicants: 0
+    totalApplications: 0,
+    pendingValidations: 0
   });
   const [recentOpportunities, setRecentOpportunities] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,10 +43,13 @@ export default function IndustryDashboard() {
           totalApps += (o._count?.applications || 0);
         });
 
+        const collabData = await api.get<any>("/collaborations/industry").catch(() => ({ collaborations: [] }));
+        const pending = (collabData.collaborations || []).filter((c: any) => c.status === 'PROPOSED' || c.status === 'REVIEWING').length;
+
         setStats({
           activePostings: active,
-          totalApplicants: totalApps,
-          newApplicants: Math.floor(totalApps * 0.3) // Simulated new for dashboard UX
+          totalApplications: totalApps,
+          pendingValidations: pending
         });
 
         // Top 3 most recent
@@ -75,15 +78,15 @@ export default function IndustryDashboard() {
                 Company Dashboard
               </h1>
               <p className="text-muted-foreground mt-1 text-base">
-                Manage your talent pipeline and active postings.
+                Manage your skill requirements, curriculum validations, and joint training.
               </p>
             </div>
             <div className="flex gap-3">
-              <Link href="/industry/academicians">
-                <Button variant="outline" className="bg-background shadow-sm h-9">Find Academicians</Button>
+              <Link href="/industry/collaborations">
+                <Button variant="outline" className="bg-background shadow-sm h-9">Review Proposals</Button>
               </Link>
               <Link href="/industry/opportunities/new">
-                <Button className="h-9 shadow-sm">Post Opportunity</Button>
+                <Button className="h-9 shadow-sm">Publish Requirements</Button>
               </Link>
             </div>
           </div>
@@ -92,34 +95,34 @@ export default function IndustryDashboard() {
           <div className="grid gap-4 md:grid-cols-3 mb-8">
             <Card className="shadow-sm border-border/50">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Active Postings</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">Active Skill Postings</CardTitle>
                 <Briefcase className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{isLoading ? "-" : stats.activePostings}</div>
-                <p className="text-xs text-muted-foreground mt-1">Currently published opportunities</p>
+                <p className="text-xs text-muted-foreground mt-1">Currently published skill requirements</p>
               </CardContent>
             </Card>
             
             <Card className="shadow-sm border-border/50">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Total Pipeline</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">Total Applications</CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{isLoading ? "-" : stats.totalApplicants}</div>
-                <p className="text-xs text-muted-foreground mt-1">Candidates across all postings</p>
+                <div className="text-2xl font-bold">{isLoading ? "-" : stats.totalApplications}</div>
+                <p className="text-xs text-muted-foreground mt-1">Participants across all postings</p>
               </CardContent>
             </Card>
 
             <Card className="shadow-sm border-border/50 bg-blue-500/5 border-blue-500/20">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-blue-600 dark:text-blue-400">New Applications</CardTitle>
+                <CardTitle className="text-sm font-medium text-blue-600 dark:text-blue-400">Pending Validations</CardTitle>
                 <TrendingUp className="h-4 w-4 text-blue-600 dark:text-blue-400" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{isLoading ? "-" : stats.newApplicants}</div>
-                <p className="text-xs text-blue-600/80 dark:text-blue-400/80 mt-1">Awaiting your review</p>
+                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{isLoading ? "-" : stats.pendingValidations}</div>
+                <p className="text-xs text-blue-600/80 dark:text-blue-400/80 mt-1">Curriculum proposals awaiting review</p>
               </CardContent>
             </Card>
           </div>
@@ -131,8 +134,8 @@ export default function IndustryDashboard() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle className="text-lg">Recent Postings</CardTitle>
-                    <CardDescription>Overview of your latest published opportunities.</CardDescription>
+                    <CardTitle className="text-lg">Recent Skill Postings</CardTitle>
+                    <CardDescription>Overview of your latest published skill requirements.</CardDescription>
                   </div>
                   <Link href="/industry/opportunities" className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
                     View all
@@ -149,9 +152,9 @@ export default function IndustryDashboard() {
                 ) : recentOpportunities.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-8 text-center text-muted-foreground">
                     <Building2 className="h-10 w-10 mb-3 opacity-20" />
-                    <p>No active postings</p>
+                    <p>No active skill postings</p>
                     <Link href="/industry/opportunities/new" className="mt-4">
-                      <Button variant="outline" size="sm">Create First Opportunity</Button>
+                      <Button variant="outline" size="sm">Publish Skill Requirement</Button>
                     </Link>
                   </div>
                 ) : (
@@ -163,16 +166,16 @@ export default function IndustryDashboard() {
                             <Briefcase className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                           </div>
                           <div>
-                            <Link href={`/industry/opportunities/${opp.id}/applicants`} className="font-medium hover:underline text-foreground">
+                            <span className="font-medium text-foreground">
                               {opp.title}
-                            </Link>
+                            </span>
                             <div className="flex items-center gap-2 mt-1">
                               <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 bg-muted">
                                 {opp.type}
                               </Badge>
                               <span className="text-xs text-muted-foreground flex items-center">
                                 <Users className="h-3 w-3 mr-1" />
-                                {opp._count?.applications || 0} Applicants
+                                {opp._count?.applications || 0} Applications
                               </span>
                             </div>
                           </div>
@@ -184,11 +187,6 @@ export default function IndustryDashboard() {
                           )}>
                             {opp.status.toLowerCase()}
                           </Badge>
-                          <Link href={`/industry/opportunities/${opp.id}/applicants`}>
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                              <ArrowRight className="h-4 w-4" />
-                            </Button>
-                          </Link>
                         </div>
                       </div>
                     ))}
@@ -213,8 +211,8 @@ export default function IndustryDashboard() {
                     <div className="w-2 h-2 rounded-full bg-blue-500"></div>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-foreground">Review {stats.newApplicants} new applications</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">Across your active postings</p>
+                    <p className="text-sm font-medium text-foreground">Review {stats.pendingValidations} pending validations</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">Curriculum proposals awaiting your endorsement</p>
                   </div>
                 </div>
                 

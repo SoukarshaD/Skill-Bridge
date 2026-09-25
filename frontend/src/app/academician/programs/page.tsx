@@ -41,11 +41,14 @@ export default function IndustryProgramsPage() {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4 md:px-8 max-w-7xl">
+    <ProtectedRoute allowedRoles={["ACADEMICIAN"]}>
+      <div className="min-h-screen bg-muted/20 flex flex-col font-sans">
+        <Navbar />
+        <main className="flex-1 container mx-auto py-8 px-4 md:px-8 max-w-7xl">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Programs & Events</h1>
-          <p className="text-muted-foreground mt-2">Manage your organization's workshops, FDPs, and training programs.</p>
+          <h1 className="text-3xl font-bold tracking-tight">Skill Development Programs</h1>
+          <p className="text-muted-foreground mt-2">Manage your organization's skill development programs and training supply.</p>
         </div>
         <div className="flex gap-4">
           <Link href="/academician/programs/browse">
@@ -122,6 +125,8 @@ export default function IndustryProgramsPage() {
           </Link>
         </div>
       )}
-    </div>
+        </main>
+      </div>
+    </ProtectedRoute>
   );
 }

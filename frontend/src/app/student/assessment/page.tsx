@@ -42,7 +42,7 @@ export default function AssessmentsPage() {
         <main className="flex-1 container mx-auto px-4 md:px-8 py-8 max-w-7xl">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight">Skill Assessments</h1>
+              <h1 className="text-3xl font-bold tracking-tight">Industry Alignment Diagnostics</h1>
               <p className="text-muted-foreground mt-2">
                 Evaluate your skills, identify gaps, and get personalized learning recommendations.
               </p>
@@ -77,7 +77,7 @@ export default function AssessmentsPage() {
               ))}
               {assessments.length === 0 && (
                 <p className="col-span-full text-center py-12 text-muted-foreground border rounded-lg border-dashed">
-                  No published assessments available yet.
+                  No published diagnostics available yet.
                 </p>
               )}
             </div>

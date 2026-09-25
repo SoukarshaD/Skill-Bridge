@@ -112,7 +112,7 @@ export default function IndustryCollaborationDetail() {
             <div className="md:col-span-2 space-y-6">
               <Card className="shadow-sm border-border/50">
                 <CardHeader>
-                  <CardTitle>Proposal Description</CardTitle>
+                  <CardTitle>Proposal Description & Curriculum Changes</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="prose prose-sm dark:prose-invert max-w-none">
@@ -153,7 +153,7 @@ export default function IndustryCollaborationDetail() {
                   
                   <div className="mt-6 space-y-4">
                     <div>
-                      <span className="text-xs font-semibold text-muted-foreground uppercase">Expertise Fields</span>
+                      <span className="text-xs font-semibold text-muted-foreground uppercase">Target Skills</span>
                       <div className="flex flex-wrap gap-1.5 mt-2">
                         {collab.expertise.length > 0 ? (
                           collab.expertise.map((exp: string, i: number) => (
@@ -178,7 +178,7 @@ export default function IndustryCollaborationDetail() {
                       onClick={() => updateStatus('ACCEPTED')}
                       disabled={isUpdating}
                     >
-                      <CheckCircle2 className="mr-2 h-4 w-4" /> Accept Proposal
+                      <CheckCircle2 className="mr-2 h-4 w-4" /> Validate & Endorse Proposal
                     </Button>
                     <Button 
                       variant="outline"
@@ -186,7 +186,7 @@ export default function IndustryCollaborationDetail() {
                       onClick={() => updateStatus('REJECTED')}
                       disabled={isUpdating}
                     >
-                      <XCircle className="mr-2 h-4 w-4" /> Reject Proposal
+                      <XCircle className="mr-2 h-4 w-4" /> Provide Feedback / Reject
                     </Button>
                   </CardFooter>
                 )}
@@ -197,7 +197,17 @@ export default function IndustryCollaborationDetail() {
                       onClick={() => updateStatus('ACTIVE')}
                       disabled={isUpdating}
                     >
-                      Mark as Active Project
+                      Start Joint Skill Development
+                    </Button>
+                  </CardFooter>
+                )}
+                {collab.status === 'ACTIVE' && (
+                  <CardFooter className="bg-muted/10 border-t p-4 flex flex-col gap-3">
+                    <Button 
+                      className="w-full bg-indigo-600 hover:bg-indigo-700 text-white" 
+                      onClick={() => router.push('/industry/programs/new')}
+                    >
+                      <Briefcase className="mr-2 h-4 w-4" /> Create Associated Skill Program
                     </Button>
                   </CardFooter>
                 )}

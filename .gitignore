@@ -38,3 +38,10 @@ coverage/
 *.tsbuildinfo
 
 sih 2026.rar
+
+# Local development / temporary files
+scratch/
+test.ts
+test2.ts
+add-demo-lmi.ts
+clear-lmi.ts

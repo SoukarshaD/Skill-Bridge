@@ -15,9 +15,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SkillBridge — Academia-Industry Collaboration Portal",
+  title: "SkillBridge — Industry Skill Alignment Portal",
   description:
-    "Skill mapping, internships & placements platform connecting students, academia, and industry.",
+    "Bridge the gap between industry demand and academic skill development.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

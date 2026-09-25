@@ -65,9 +65,9 @@ export default function StudentProgramsPage() {
             <Badge variant="outline" className={getBadgeColor(p.type)}>
               {p.type.replace('_', ' ')}
             </Badge>
-            {matchInfo && matchInfo.overallMatchPercentage !== null && (
+            {matchInfo && matchInfo.missingSkills !== undefined && (
               <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20">
-                {matchInfo.overallMatchPercentage}% Match
+                Addresses {matchInfo.missingSkills.length} Skill Gaps
               </Badge>
             )}
           </div>
@@ -112,8 +112,8 @@ export default function StudentProgramsPage() {
       <div className="container mx-auto py-8 px-4 md:px-8 max-w-7xl">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Programs & Events</h1>
-          <p className="text-muted-foreground mt-2">Discover workshops, guest lectures, and training opportunities.</p>
+          <h1 className="text-3xl font-bold tracking-tight">Skill Development Programs</h1>
+          <p className="text-muted-foreground mt-2">Discover training programs and workshops to address your skill gaps.</p>
         </div>
       </div>
 

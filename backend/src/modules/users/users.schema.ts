@@ -11,9 +11,9 @@ export const updateStudentSkillsSchema = z.object({
   skills: z.array(
     z.object({
       skillId: z.string().min(1, "Skill ID is required"),
-      proficiency: z.number().int().min(1).max(5),
+      proficiency: z.number().int().min(1).max(5).default(3),
     })
-  )
+  ),
 });
 
 export const updateAcademicProfileSchema = z.object({

@@ -69,9 +69,9 @@ function NewIndustryCollaborationForm() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Propose Collaboration</CardTitle>
+              <CardTitle>Propose Curriculum Alignment / Joint Training</CardTitle>
               <CardDescription>
-                Send a consultancy or collaborative research request to the selected academician.
+                Send a joint training or curriculum alignment proposal to the selected academician.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -115,7 +115,7 @@ function NewIndustryCollaborationForm() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="expertise">Required Expertise (comma-separated)</Label>
+                  <Label htmlFor="expertise">Target Skills (comma-separated)</Label>
                   <Input
                     id="expertise"
                     value={formData.expertise}

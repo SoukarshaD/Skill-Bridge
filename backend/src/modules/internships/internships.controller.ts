@@ -32,58 +32,7 @@ export class InternshipController {
     }
   }
 
-  async updateStatus(req: Request, res: Response) {
-    try {
-      const user = (req as any).user;
-      const { status } = req.body;
-      const internship = await internshipService.updateStatus(req.params.id as string, status, user.id, user.role, user.organizationId);
-      res.json(internship);
-    } catch (error: any) {
-      res.status(400).json({ error: error.message });
-    }
-  }
 
-  async addMilestone(req: Request, res: Response) {
-    try {
-      const user = (req as any).user;
-      const milestone = await internshipService.addMilestone(req.params.id as string, req.body, user.id, user.role, user.organizationId);
-      res.status(201).json(milestone);
-    } catch (error: any) {
-      res.status(400).json({ error: error.message });
-    }
-  }
-
-  async updateMilestone(req: Request, res: Response) {
-    try {
-      const user = (req as any).user;
-      const { status } = req.body;
-      const milestone = await internshipService.updateMilestone(req.params.id as string, req.params.milestoneId as string, status, user.id, user.role, user.organizationId);
-      res.json(milestone);
-    } catch (error: any) {
-      res.status(400).json({ error: error.message });
-    }
-  }
-
-  async addProgressUpdate(req: Request, res: Response) {
-    try {
-      const user = (req as any).user;
-      const { content } = req.body;
-      const update = await internshipService.addProgressUpdate(req.params.id as string, content, user.id, user.role, user.organizationId);
-      res.status(201).json(update);
-    } catch (error: any) {
-      res.status(400).json({ error: error.message });
-    }
-  }
-
-  async completeInternship(req: Request, res: Response) {
-    try {
-      const user = (req as any).user;
-      const internship = await internshipService.completeInternship(req.params.id as string, req.body, user.id, user.role, user.organizationId);
-      res.json(internship);
-    } catch (error: any) {
-      res.status(400).json({ error: error.message });
-    }
-  }
 
   async addToPortfolio(req: Request, res: Response) {
     try {

@@ -38,7 +38,7 @@ export default function StudentInternshipsPage() {
           <div className="flex justify-between items-center mb-8">
             <div>
               <h1 className="text-3xl font-bold tracking-tight">My Internships</h1>
-              <p className="text-muted-foreground mt-1">Track your active internships, milestones, and completion status.</p>
+              <p className="text-muted-foreground mt-1">Your active apprenticeships and practical skill-development placements.</p>
             </div>
           </div>
 
@@ -71,17 +71,14 @@ export default function StudentInternshipsPage() {
                   </CardHeader>
                   <CardContent className="flex-1">
                     <div className="space-y-2 mt-4">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Milestones:</span>
-                        <span className="font-medium">
-                          {internship.milestones.filter((m:any) => m.status === 'COMPLETED').length} / {internship.milestones.length}
-                        </span>
-                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Your application for this opportunity has been accepted and moved to active status.
+                      </p>
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <Link href={`/student/internships/${internship.id}`} className="w-full">
-                      <Button className="w-full">Open Workspace</Button>
+                    <Link href={`/student/opportunities/${internship.opportunityId}`} className="w-full">
+                      <Button className="w-full">View Opportunity</Button>
                     </Link>
                   </CardFooter>
                 </Card>

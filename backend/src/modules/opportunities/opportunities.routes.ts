@@ -4,7 +4,6 @@ import {
   createOpportunity,
   getOrganizationOpportunities,
   getStudentRecommendations,
-  getRankedApplicants,
   getAllPublishedOpportunities,
   getOpportunityDetails,
   getAcademicianOpportunities,
@@ -21,7 +20,7 @@ router.get('/:id', requireAuth, requireRole(['STUDENT', 'INDUSTRY', 'ADMIN', 'AC
 // Industry/Organization routes
 router.get('/organization', requireAuth, requireRole(['INDUSTRY', 'ADMIN']), getOrganizationOpportunities);
 router.post('/', requireAuth, requireRole(['INDUSTRY', 'ADMIN']), createOpportunity);
-router.get('/:id/applicants/ranked', requireAuth, requireRole(['INDUSTRY', 'ADMIN']), getRankedApplicants);
+
 router.get('/academicians/search', requireAuth, requireRole(['INDUSTRY', 'ADMIN']), searchAcademicians);
 
 // Academician routes

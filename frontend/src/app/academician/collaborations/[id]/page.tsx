@@ -112,7 +112,7 @@ export default function AcademicianCollaborationDetail() {
             <div className="md:col-span-2 space-y-6">
               <Card className="shadow-sm border-border/50">
                 <CardHeader>
-                  <CardTitle>Proposal Description</CardTitle>
+                  <CardTitle>Proposal Description & Curriculum Changes</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="prose prose-sm dark:prose-invert max-w-none">
@@ -165,7 +165,7 @@ export default function AcademicianCollaborationDetail() {
                     <p className="font-medium">{collab.duration || "Not specified"}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Required Expertise</p>
+                    <p className="text-sm text-muted-foreground">Target Skills</p>
                     <div className="flex flex-wrap gap-2 mt-1">
                       {collab.expertise?.length > 0 ? (
                         collab.expertise.map((exp: string, i: number) => (
@@ -186,7 +186,7 @@ export default function AcademicianCollaborationDetail() {
                         onClick={() => updateStatus('REVIEWING')}
                         disabled={isUpdating}
                       >
-                        Start Reviewing
+                        Start Industry Review
                       </Button>
                       <Button 
                         variant="outline" 
@@ -194,7 +194,7 @@ export default function AcademicianCollaborationDetail() {
                         onClick={() => updateStatus('REJECTED')}
                         disabled={isUpdating}
                       >
-                        Reject Proposal
+                        Withdraw / Reject Proposal
                       </Button>
                     </>
                   )}
@@ -205,7 +205,7 @@ export default function AcademicianCollaborationDetail() {
                         onClick={() => updateStatus('ACCEPTED')}
                         disabled={isUpdating}
                       >
-                        Accept Proposal
+                        Validate & Endorse Proposal
                       </Button>
                       <Button 
                         variant="outline" 
@@ -213,7 +213,7 @@ export default function AcademicianCollaborationDetail() {
                         onClick={() => updateStatus('REJECTED')}
                         disabled={isUpdating}
                       >
-                        Reject Proposal
+                        Withdraw / Reject Proposal
                       </Button>
                     </>
                   )}
@@ -223,17 +223,26 @@ export default function AcademicianCollaborationDetail() {
                       onClick={() => updateStatus('ACTIVE')}
                       disabled={isUpdating}
                     >
-                      Mark as Active
+                      Start Joint Skill Development
                     </Button>
                   )}
                   {collab.status === 'ACTIVE' && (
-                    <Button 
-                      className="w-full" 
-                      onClick={() => updateStatus('COMPLETED')}
-                      disabled={isUpdating}
-                    >
-                      Mark as Completed
-                    </Button>
+                    <div className="flex flex-col gap-2 w-full">
+                      <Button 
+                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white" 
+                        onClick={() => router.push('/academician/programs/new')}
+                      >
+                        <Briefcase className="mr-2 h-4 w-4" /> Create Associated Skill Program
+                      </Button>
+                      <Button 
+                        variant="outline"
+                        className="w-full" 
+                        onClick={() => updateStatus('COMPLETED')}
+                        disabled={isUpdating}
+                      >
+                        Complete Joint Training
+                      </Button>
+                    </div>
                   )}
                 </CardFooter>
               </Card>

@@ -78,11 +78,10 @@ export default function StudentProfile() {
         year: profile.year ? parseInt(profile.year) : undefined,
       });
 
+      // 2. Save Skills
       const payload = {
         skills: skills.map(s => ({ skillId: s.skillId, proficiency: s.proficiency }))
       };
-      
-      // 2. Save Skills
       await api.post("/users/profile/student/skills", payload);
 
       setMessage("Profile and skills saved successfully!");

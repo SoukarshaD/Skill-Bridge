@@ -51,9 +51,9 @@ export default function CareerGuidancePage() {
     <div className="container mx-auto py-8 px-4 max-w-5xl">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Career Guidance</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Emerging Job Market Pathways</h1>
           <p className="text-muted-foreground mt-1">
-            Discover career paths based on your current skill profile.
+            Discover emerging career paths and skill gaps based on your current skill profile.
           </p>
         </div>
         <div className="flex gap-2">
@@ -75,9 +75,9 @@ export default function CareerGuidancePage() {
       ) : recommendations.length === 0 ? (
         <Card className="flex flex-col items-center justify-center py-16 text-center border-dashed">
           <AlertCircle className="h-12 w-12 text-muted-foreground mb-4 opacity-50" />
-          <CardTitle>No Career Recommendations</CardTitle>
+          <CardTitle>No Pathways Found</CardTitle>
           <CardDescription className="mt-2 max-w-md">
-            Update your skill profile or complete an assessment to receive personalized career recommendations.
+            Update your skill profile or complete an assessment to receive personalized pathway recommendations.
           </CardDescription>
           <Link href="/student/profile" className="mt-6">
             <Button>Complete Skill Profile</Button>

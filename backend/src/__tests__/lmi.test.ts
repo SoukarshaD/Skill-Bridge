@@ -32,7 +32,7 @@ describe("LMI Foundation API", () => {
         isVerified: true
       }
     });
-    adminToken = generateToken({ id: admin.id, userId: admin.id, role: admin.role, institutionId: null });
+    adminToken = generateToken({ id: admin.id, userId: admin.id, role: admin.role, institutionId: undefined });
 
     const industry = await prisma.user.create({
       data: {
@@ -43,7 +43,7 @@ describe("LMI Foundation API", () => {
         isVerified: true
       }
     });
-    industryToken = generateToken({ id: industry.id, userId: industry.id, role: industry.role, institutionId: null });
+    industryToken = generateToken({ id: industry.id, userId: industry.id, role: industry.role, institutionId: undefined });
 
     const student = await prisma.user.create({
       data: {
@@ -54,7 +54,7 @@ describe("LMI Foundation API", () => {
         isVerified: true
       }
     });
-    studentToken = generateToken({ id: student.id, userId: student.id, role: student.role, institutionId: null });
+    studentToken = generateToken({ id: student.id, userId: student.id, role: student.role, institutionId: undefined });
 
     const role = await prisma.careerRole.create({
       data: {
@@ -73,6 +73,15 @@ describe("LMI Foundation API", () => {
       }
     });
     skillId = skill.id;
+
+    await prisma.skillTaxonomy.create({
+      data: {
+        name: "React",
+        normalizedName: "react",
+        category: "Programming",
+        domain: "IT"
+      }
+    });
 
     const org = await prisma.organization.create({
       data: {
@@ -99,7 +108,7 @@ describe("LMI Foundation API", () => {
         observedAt: new Date().toISOString(),
         isSynthetic: true,
         skills: [
-          { skillId, requiredProficiency: 4 }
+          { rawSkillName: "TypeScript", skillId, requiredProficiency: 4 }
         ]
       };
 
@@ -121,6 +130,84 @@ describe("LMI Foundation API", () => {
 
       expect(res.status).toBe(403);
     });
+
+    it("should prevent duplicate ingestion using sourceReference and sourceType", async () => {
+       await prisma.demandSignal.create({
+         data: {
+           title: "Original",
+           sourceType: "JOB_POSTING",
+           sourceReference: "JOB-123",
+           observedAt: new Date(),
+           status: "PROCESSED"
+         }
+       });
+
+       const res = await request(app)
+        .post("/api/lmi")
+        .set("Cookie", [`token=${adminToken}`])
+        .send({
+          title: "Duplicate",
+          sourceType: "JOB_POSTING",
+          sourceReference: "JOB-123",
+          observedAt: new Date().toISOString()
+        });
+        
+       expect(res.status).toBe(409);
+    });
+  });
+
+  describe("POST /api/lmi/normalize-preview", () => {
+     it("should normalize exact skill, alias skill, unresolved skill, role and location", async () => {
+        const payload = {
+           title: "Hiring React dev",
+           role: "Software Engineer",
+           location: "Mumbai",
+           sourceType: "JOB_POSTING",
+           observedAt: new Date().toISOString(),
+           skills: [
+             { name: "TypeScript" }, // Exact match
+             { name: "ReactJS" }, // Alias match (from lmi.service.ts)
+             { name: "UnknownFramework" } // Unresolved
+           ]
+        };
+
+        const res = await request(app)
+          .post("/api/lmi/normalize-preview")
+          .set("Cookie", [`token=${adminToken}`])
+          .send(payload);
+
+        expect(res.status).toBe(200);
+        expect(res.body.success).toBe(true);
+
+        const preview = res.body.preview;
+        expect(preview.rawTitle).toBe("Hiring React dev");
+        expect(preview.normalizedRole.title).toBe("Software Engineer");
+        expect(preview.normalizedLocation).toBe("Mumbai, Maharashtra");
+
+        const exact = preview.skills.find((s: any) => s.rawSkillName === "TypeScript");
+        expect(exact.normalizationMethod).toBe("EXACT");
+        expect(exact.confidence).toBe(1.0);
+        expect(exact.isUnresolved).toBe(false);
+
+        const alias = preview.skills.find((s: any) => s.rawSkillName === "ReactJS");
+        expect(alias.normalizationMethod).toBe("ALIAS");
+        expect(alias.confidence).toBe(0.9);
+        expect(alias.isUnresolved).toBe(false);
+
+        const unresolved = preview.skills.find((s: any) => s.rawSkillName === "UnknownFramework");
+        expect(unresolved.normalizationMethod).toBe("UNRESOLVED");
+        expect(unresolved.confidence).toBe(0);
+        expect(unresolved.isUnresolved).toBe(true);
+        expect(unresolved.skillId).toBeNull();
+     });
+
+     it("should reject invalid input", async () => {
+        const res = await request(app)
+          .post("/api/lmi/normalize-preview")
+          .set("Cookie", [`token=${adminToken}`])
+          .send({ title: "Bad data without sourceType or observedAt" });
+        expect(res.status).toBe(400);
+     });
   });
 
   describe("GET /api/lmi", () => {

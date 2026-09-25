@@ -82,18 +82,18 @@ export default function HomePage() {
           
           <div className="container relative mx-auto px-4 md:px-8 flex flex-col items-center text-center space-y-8 max-w-5xl">
             <Badge variant="outline" className="px-4 py-1.5 text-sm bg-primary/5 text-primary border-primary/20 rounded-full font-medium tracking-wide">
-              Academia–Industry Collaboration Portal
+              Skill Bridge — Setu-Kaushal Platform
             </Badge>
             
             <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl md:text-7xl lg:text-[5rem] leading-[1.1] text-foreground">
               Bridge the Gap Between <br className="hidden md:block"/> 
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">
-                Talent and Opportunity
+                Industry Demand and Skill Development
               </span>
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-normal">
-              SkillBridge connects students, academia, and industry through intelligent skill mapping, seamless opportunity matching, and data-driven placement analytics.
+              SkillBridge aligns academic training with emerging industry requirements through intelligent skill mapping, curriculum collaboration, and data-driven gap analytics.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4 w-full sm:w-auto">
@@ -134,14 +134,14 @@ export default function HomePage() {
                       <GraduationCap className="h-6 w-6" />
                     </div>
                     <div>
-                      <CardTitle className="text-2xl">Students</CardTitle>
-                      <CardDescription className="text-base mt-1">Discover paths & land roles</CardDescription>
+                      <CardTitle className="text-2xl">Trainee / Candidate</CardTitle>
+                      <CardDescription className="text-base mt-1">Explore skills, training programs and career information</CardDescription>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <ul className="space-y-3">
-                    {["Dynamic skill profiling & matching", "Automated resume & application tracking", "Curated learning resource recommendations"].map((feature, i) => (
+                    {["Dynamic skill profiling & gap analysis", "Targeted skill development programs", "Curated learning resource recommendations"].map((feature, i) => (
                       <li key={i} className="flex items-start text-sm text-muted-foreground">
                         <CheckCircle2 className="mr-2 h-4 w-4 text-primary shrink-0 mt-0.5" />
                         <span>{feature}</span>
@@ -150,7 +150,7 @@ export default function HomePage() {
                   </ul>
                   <div className="pt-2 border-t border-border/50">
                     <Link href={user ? getDashboardLink(user.role) : "/register"} className="text-primary text-sm font-medium hover:underline inline-flex items-center mt-4">
-                      {user?.role === "STUDENT" ? "Continue to Dashboard" : "Join as a Student"} <ArrowRight className="ml-1 h-4 w-4" />
+                      {user?.role === "STUDENT" ? "Continue to Dashboard" : "Join as Trainee / Candidate"} <ArrowRight className="ml-1 h-4 w-4" />
                     </Link>
                   </div>
                 </CardContent>
@@ -164,14 +164,14 @@ export default function HomePage() {
                       <Building2 className="h-6 w-6" />
                     </div>
                     <div>
-                      <CardTitle className="text-2xl">Industry Partners</CardTitle>
-                      <CardDescription className="text-base mt-1">Source pre-assessed talent</CardDescription>
+                      <CardTitle className="text-2xl">Industry / Employer</CardTitle>
+                      <CardDescription className="text-base mt-1">Share industry demand and validate skills and training programs</CardDescription>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <ul className="space-y-3">
-                    {["Post internships, jobs & apprenticeships", "AI-assisted candidate matching & ranking", "Publish custom learning & training tracks"].map((feature, i) => (
+                    {["Publish industry skill requirements", "Validate curriculum & training programs", "Collaborate on joint skill development"].map((feature, i) => (
                       <li key={i} className="flex items-start text-sm text-muted-foreground">
                         <CheckCircle2 className="mr-2 h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
                         <span>{feature}</span>
@@ -180,7 +180,7 @@ export default function HomePage() {
                   </ul>
                   <div className="pt-2 border-t border-border/50">
                     <Link href={user ? getDashboardLink(user.role) : "/register"} className="text-blue-600 dark:text-blue-400 text-sm font-medium hover:underline inline-flex items-center mt-4">
-                      {user?.role === "INDUSTRY" ? "Continue to Dashboard" : "Join as Industry Partner"} <ArrowRight className="ml-1 h-4 w-4" />
+                      {user?.role === "INDUSTRY" ? "Continue to Dashboard" : "Join as Industry / Employer"} <ArrowRight className="ml-1 h-4 w-4" />
                     </Link>
                   </div>
                 </CardContent>
@@ -194,14 +194,14 @@ export default function HomePage() {
                       <BookOpen className="h-6 w-6" />
                     </div>
                     <div>
-                      <CardTitle className="text-2xl">Academicians</CardTitle>
-                      <CardDescription className="text-base mt-1">Research & industry alignment</CardDescription>
+                      <CardTitle className="text-2xl">Training Provider</CardTitle>
+                      <CardDescription className="text-base mt-1">Manage training programs, skill gaps and curriculum alignment</CardDescription>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <ul className="space-y-3">
-                    {["Build an Academic Expertise Profile", "Discover Faculty Development Programs", "Engage in industrial training & consultancy"].map((feature, i) => (
+                    {["Propose curriculum alignment", "Access industry training supply", "Collaborate on joint skill development"].map((feature, i) => (
                       <li key={i} className="flex items-start text-sm text-muted-foreground">
                         <CheckCircle2 className="mr-2 h-4 w-4 text-purple-600 dark:text-purple-400 shrink-0 mt-0.5" />
                         <span>{feature}</span>
@@ -210,7 +210,7 @@ export default function HomePage() {
                   </ul>
                   <div className="pt-2 border-t border-border/50">
                     <Link href={user ? getDashboardLink(user.role) : "/register"} className="text-purple-600 dark:text-purple-400 text-sm font-medium hover:underline inline-flex items-center mt-4">
-                      {user?.role === "ACADEMICIAN" ? "Continue to Dashboard" : "Join as Academician"} <ArrowRight className="ml-1 h-4 w-4" />
+                      {user?.role === "ACADEMICIAN" ? "Continue to Dashboard" : "Join as Training Provider"} <ArrowRight className="ml-1 h-4 w-4" />
                     </Link>
                   </div>
                 </CardContent>
@@ -224,14 +224,14 @@ export default function HomePage() {
                       <BarChart4 className="h-6 w-6" />
                     </div>
                     <div>
-                      <CardTitle className="text-2xl">Institution Admins</CardTitle>
-                      <CardDescription className="text-base mt-1">Data-driven placement strategy</CardDescription>
+                      <CardTitle className="text-2xl">Government / Scheme Administrator</CardTitle>
+                      <CardDescription className="text-base mt-1">Analyze district intelligence and generate evidence-based training plans</CardDescription>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <ul className="space-y-3">
-                    {["Real-time placement readiness tracking", "True placement funnel analytics", "Department-wise zero-filled skill gap analysis"].map((feature, i) => (
+                    {["Real-time skill gap tracking", "Curriculum alignment analytics", "Department-wise zero-filled skill gap analysis"].map((feature, i) => (
                       <li key={i} className="flex items-start text-sm text-muted-foreground">
                         <CheckCircle2 className="mr-2 h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                         <span>{feature}</span>
@@ -240,7 +240,7 @@ export default function HomePage() {
                   </ul>
                   <div className="pt-2 border-t border-border/50">
                     <Link href={user ? getDashboardLink(user.role) : "/register"} className="text-amber-600 dark:text-amber-400 text-sm font-medium hover:underline inline-flex items-center mt-4">
-                      {user?.role === "ADMIN" ? "Continue to Dashboard" : "Join as Admin"} <ArrowRight className="ml-1 h-4 w-4" />
+                      {user?.role === "ADMIN" ? "Continue to Dashboard" : "Join as Scheme Administrator"} <ArrowRight className="ml-1 h-4 w-4" />
                     </Link>
                   </div>
                 </CardContent>

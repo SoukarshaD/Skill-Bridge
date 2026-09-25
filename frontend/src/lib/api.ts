@@ -53,8 +53,8 @@ async function request<T>(
   if (!response.ok) {
     throw new ApiError(
       response.status,
-      data.message || "An error occurred",
-      data.errors
+      data.error || data.message || "An error occurred",
+      data.errors || (Array.isArray(data.error) ? data.error : undefined)
     );
   }
 

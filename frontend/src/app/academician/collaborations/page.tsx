@@ -50,10 +50,10 @@ export default function AcademicianCollaborations() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
             <div>
               <h1 className="text-3xl font-bold tracking-tight text-foreground">
-                My Collaborations
+                Industry Skill Collaboration
               </h1>
               <p className="text-muted-foreground mt-1 text-base">
-                Manage your proactive proposals to industry partners.
+                Manage your curriculum alignment and joint skill-development proposals.
               </p>
             </div>
             <Link href="/academician/collaborations/new">
@@ -65,8 +65,8 @@ export default function AcademicianCollaborations() {
 
           <Card className="shadow-sm border-border/50">
             <CardHeader>
-              <CardTitle className="text-lg">Proposals & Collaborations</CardTitle>
-              <CardDescription>Track the status of your research and consultancy proposals.</CardDescription>
+              <CardTitle className="text-lg">Curriculum & Training Proposals</CardTitle>
+              <CardDescription>Track the status of your curriculum redesign and joint training proposals.</CardDescription>
             </CardHeader>
             <CardContent>
               {isLoading ? (
@@ -82,7 +82,7 @@ export default function AcademicianCollaborations() {
                   </div>
                   <h3 className="text-lg font-medium">No proposals yet</h3>
                   <p className="text-muted-foreground mt-2 mb-6 max-w-sm">
-                    Start a conversation with an industry partner by proposing a research project, consultancy, or FDP.
+                    Start a conversation with an industry partner by proposing a curriculum review, joint training, or skill-development program.
                   </p>
                   <Link href="/academician/collaborations/new">
                     <Button>Create First Proposal</Button>

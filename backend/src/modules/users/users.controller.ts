@@ -49,6 +49,9 @@ export const updateStudentProfile = async (req: Request, res: Response, next: Ne
       where: { userId },
       update: data,
       create: { ...data, userId },
+      include: {
+        studentSkills: { include: { skill: true } }
+      }
     });
 
     res.status(200).json({ profile });
@@ -78,9 +81,7 @@ export const updateStudentSkills = async (req: Request, res: Response, next: Nex
 
     const profileId = studentProfile.id;
 
-    // Use transaction to delete existing skills and insert new ones
     await prisma.$transaction(async (tx) => {
-      // Find what existing skills are there
       await tx.studentSkill.deleteMany({
         where: { studentProfileId: profileId },
       });
@@ -108,6 +109,7 @@ export const updateStudentSkills = async (req: Request, res: Response, next: Nex
     }
   }
 };
+
 
 export const updateAcademicProfile = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {

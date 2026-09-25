@@ -44,6 +44,8 @@ model User {
   evaluatedChallenges         ChallengeSubmission[]      @relation("ChallengeEvaluator")
   projectWorkspaces           ProjectWorkspace[]         @relation("StudentProjectWorkspaces")
   mentoredProjects            ProjectWorkspace[]         @relation("ProjectMentor")
+  employerValidations         EmployerValidation[]
+  trainingOutcomes            TrainingOutcome[]
 
   @@index([role])
   @@index([email])
@@ -52,22 +54,23 @@ model User {
 }
 
 model Organization {
-  id                String             @id @default(cuid())
-  type              OrganizationType
-  name              String
-  domain            String?
-  isVerified        Boolean            @default(false)
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  collaborations    Collaboration[]    @relation("IndustryCollaborations")
-  learningResources LearningResource[]
-  opportunities     Opportunity[]
-  institutionUsers  User[]             @relation("InstitutionUsers")
-  organizationUsers User[]             @relation("OrganizationUsers")
-  internships       Internship[]
-  programs          Program[]
-  projectWorkspaces ProjectWorkspace[]
-  demandSignals     DemandSignal[]
+  id                  String               @id @default(cuid())
+  type                OrganizationType
+  name                String
+  domain              String?
+  isVerified          Boolean              @default(false)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  collaborations      Collaboration[]      @relation("IndustryCollaborations")
+  learningResources   LearningResource[]
+  opportunities       Opportunity[]
+  institutionUsers    User[]               @relation("InstitutionUsers")
+  organizationUsers   User[]               @relation("OrganizationUsers")
+  internships         Internship[]
+  programs            Program[]
+  projectWorkspaces   ProjectWorkspace[]
+  demandSignals       DemandSignal[]
+  employerValidations EmployerValidation[]
 
   @@index([type])
 }
@@ -110,6 +113,7 @@ model SkillTaxonomy {
   certificateSkills      CertificateSkill[]
   careerRoleSkills       CareerRoleSkill[]
   demandSignalSkills     DemandSignalSkill[]
+  employerValidations    EmployerValidation[]
 
   @@index([domain])
   @@index([category])
@@ -127,15 +131,15 @@ model CareerRole {
 }
 
 model CareerRoleSkill {
-  id                  String        @id @default(cuid())
+  id                  String @id @default(cuid())
   careerRoleId        String
   skillId             String
-  requiredProficiency Int           @default(3)
-  weight              Float         @default(1.0)
-  importance          String        @default("CORE") // CORE, PREFERRED, BONUS
-  
-  careerRole          CareerRole    @relation(fields: [careerRoleId], references: [id], onDelete: Cascade)
-  skill               SkillTaxonomy @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  requiredProficiency Int    @default(3)
+  weight              Float  @default(1.0)
+  importance          String @default("CORE") // CORE, PREFERRED, BONUS
+
+  careerRole CareerRole    @relation(fields: [careerRoleId], references: [id], onDelete: Cascade)
+  skill      SkillTaxonomy @relation(fields: [skillId], references: [id], onDelete: Cascade)
 
   @@unique([careerRoleId, skillId])
   @@index([careerRoleId])
@@ -751,10 +755,12 @@ model Program {
   createdAt            DateTime      @default(now())
   updatedAt            DateTime      @updatedAt
 
-  organization   Organization          @relation(fields: [organizationId], references: [id])
-  organizer      User                  @relation("ProgramOrganizer", fields: [organizerId], references: [id])
-  requiredSkills ProgramSkill[]
-  registrations  ProgramRegistration[]
+  organization        Organization          @relation(fields: [organizationId], references: [id])
+  organizer           User                  @relation("ProgramOrganizer", fields: [organizerId], references: [id])
+  requiredSkills      ProgramSkill[]
+  registrations       ProgramRegistration[]
+  employerValidations EmployerValidation[]
+  trainingOutcomes    TrainingOutcome[]
 
   @@index([organizationId])
   @@index([type])
@@ -1021,25 +1027,27 @@ enum DemandSignalStatus {
 }
 
 model DemandSignal {
-  id              String             @id @default(cuid())
-  sourceType      DemandSourceType
-  sourceReference String?
-  title           String
-  roleId          String?
-  organizationId  String?
-  location        String?
-  description     String?
-  observedAt      DateTime
-  collectedAt     DateTime           @default(now())
-  confidence      Float              @default(1.0)
-  status          DemandSignalStatus @default(RAW)
-  isSynthetic     Boolean            @default(false)
-  createdAt       DateTime           @default(now())
-  updatedAt       DateTime           @updatedAt
+  id                 String             @id @default(cuid())
+  sourceType         DemandSourceType
+  sourceReference    String?
+  title              String
+  rawRoleTitle       String?
+  roleId             String?
+  organizationId     String?
+  location           String?
+  normalizedLocation String?
+  description        String?
+  observedAt         DateTime
+  collectedAt        DateTime           @default(now())
+  confidence         Float              @default(1.0)
+  status             DemandSignalStatus @default(RAW)
+  isSynthetic        Boolean            @default(false)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
 
-  role            CareerRole?        @relation(fields: [roleId], references: [id])
-  organization    Organization?      @relation(fields: [organizationId], references: [id])
-  skills          DemandSignalSkill[]
+  role         CareerRole?         @relation(fields: [roleId], references: [id])
+  organization Organization?       @relation(fields: [organizationId], references: [id])
+  skills       DemandSignalSkill[]
 
   @@index([sourceType])
   @@index([roleId])
@@ -1048,18 +1056,100 @@ model DemandSignal {
 }
 
 model DemandSignalSkill {
-  id                  String       @id @default(cuid())
+  id                  String   @id @default(cuid())
   demandSignalId      String
-  skillId             String
+  rawSkillName        String
+  skillId             String?
   requiredProficiency Int?
-  isMandatory         Boolean      @default(true)
+  isMandatory         Boolean  @default(true)
   evidence            String?
-  createdAt           DateTime     @default(now())
-  updatedAt           DateTime     @updatedAt
+  normalizationMethod String?
+  confidence          Float?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
-  demandSignal        DemandSignal @relation(fields: [demandSignalId], references: [id], onDelete: Cascade)
-  skill               SkillTaxonomy @relation(fields: [skillId], references: [id])
+  demandSignal DemandSignal   @relation(fields: [demandSignalId], references: [id], onDelete: Cascade)
+  skill        SkillTaxonomy? @relation(fields: [skillId], references: [id])
 
-  @@unique([demandSignalId, skillId])
+  @@unique([demandSignalId, rawSkillName])
   @@index([skillId])
+}
+
+// -----------------------------------------
+// PHASE 15: EMPLOYER VALIDATION & OUTCOMES
+// -----------------------------------------
+
+enum ValidationRelevance {
+  RELEVANT
+  LOW_RELEVANCE
+  EMERGING_IMPORTANCE
+}
+
+model EmployerValidation {
+  id             String              @id @default(cuid())
+  organizationId String
+  userId         String
+  skillId        String?
+  programId      String?
+  relevance      ValidationRelevance
+  comments       String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+
+  organization Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill        SkillTaxonomy? @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  program      Program?       @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  // Prevent duplicate validation from the same employer for the same skill+program context
+  // Prisma requires unique constraints to have no nullable fields OR we just enforce this at the application layer if it's tricky.
+  // Actually, we can just enforce it at the application layer to avoid Prisma nullable unique constraint quirks across different DBs.
+  // We'll index them instead.
+
+  @@index([organizationId])
+  @@index([skillId])
+  @@index([programId])
+}
+
+enum OutcomeCategory {
+  TRAINING_COMPLETED
+  EMPLOYMENT
+  APPRENTICESHIP
+  FURTHER_TRAINING
+  NOT_PLACED
+  UNKNOWN
+}
+
+model TrainingOutcome {
+  id           String          @id @default(cuid())
+  programId    String
+  studentId    String
+  category     OutcomeCategory
+  evidenceDate DateTime        @default(now())
+  source       String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  program Program @relation(fields: [programId], references: [id], onDelete: Cascade)
+  student User    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  // A student can have multiple outcomes for a program (e.g. COMPLETED, then EMPLOYMENT)
+  @@unique([programId, studentId, category])
+  @@index([programId])
+  @@index([studentId])
+}
+
+model DistrictTrainingPlan {
+  id                    String   @id @default(cuid())
+  district              String
+  evidenceStatus        String
+  totalDemandSignals    Int
+  totalTrainingPrograms Int
+  prioritySkills        Json     // Stores array of PrioritySkill
+  recommendedPrograms   Json     // Stores array of RecommendedProgram
+  oversuppliedSkills    Json     // Stores array of oversupplied skills
+  methodology           Json     // Snapshot of methodology text
+  createdAt             DateTime @default(now())
+
+  @@index([district])
 }
