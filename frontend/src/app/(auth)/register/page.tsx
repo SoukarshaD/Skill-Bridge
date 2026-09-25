@@ -72,9 +72,9 @@ export default function RegisterPage() {
     <div className="flex min-h-screen w-full items-center justify-center bg-muted/40 py-10 px-4">
       <Card className="w-full max-w-lg my-8 shadow-lg">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Create your Skill Bridge account</CardTitle>
+          <CardTitle className="text-2xl font-bold">Create your SkillBridge account</CardTitle>
           <CardDescription>
-            Join Skill Bridge — Setu-Kaushal
+            Join SkillBridge
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit(onSubmit)}>

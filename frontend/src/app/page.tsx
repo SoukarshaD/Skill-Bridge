@@ -82,7 +82,7 @@ export default function HomePage() {
           
           <div className="container relative mx-auto px-4 md:px-8 flex flex-col items-center text-center space-y-8 max-w-5xl">
             <Badge variant="outline" className="px-4 py-1.5 text-sm bg-primary/5 text-primary border-primary/20 rounded-full font-medium tracking-wide">
-              Skill Bridge — Setu-Kaushal Platform
+              SkillBridge Platform
             </Badge>
             
             <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl md:text-7xl lg:text-[5rem] leading-[1.1] text-foreground">
