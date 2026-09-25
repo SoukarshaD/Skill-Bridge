@@ -1,12 +1,11 @@
 {
   "version": 2,
   "buildCommand": "npm run build",
-  "outputDirectory": "out",
   "framework": "nextjs",
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://academia-industry-api.onrender.com/api/$1"
+      "destination": "https://skill-bridge-api-c064.onrender.com/api/$1"
     }
   ]
 }
