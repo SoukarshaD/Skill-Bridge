@@ -46,6 +46,8 @@ export async function cleanupAll(): Promise<void> {
   // 3. Resource skill mappings
   await prisma.learningResourceSkill.deleteMany();
   await prisma.opportunitySkill.deleteMany();
+  await prisma.demandSignalSkill.deleteMany();
+  await prisma.demandSignal.deleteMany();
 
   // 4. Collaboration (references User + Organization)
   await prisma.collaboration.deleteMany();
@@ -61,6 +63,10 @@ export async function cleanupAll(): Promise<void> {
 
   // 8. Learning resources and Opportunities (reference Organization)
   await prisma.learningResource.deleteMany();
+  await prisma.programRegistration.deleteMany();
+  await prisma.program.deleteMany();
+  await prisma.mentorship.deleteMany();
+  await prisma.mentorshipProgram.deleteMany();
   await prisma.opportunity.deleteMany();
 
   // 9. Profiles (reference User via 1-1 unique)

@@ -67,6 +67,7 @@ model Organization {
   internships       Internship[]
   programs          Program[]
   projectWorkspaces ProjectWorkspace[]
+  demandSignals     DemandSignal[]
 
   @@index([type])
 }
@@ -108,6 +109,7 @@ model SkillTaxonomy {
   programSkills          ProgramSkill[]
   certificateSkills      CertificateSkill[]
   careerRoleSkills       CareerRoleSkill[]
+  demandSignalSkills     DemandSignalSkill[]
 
   @@index([domain])
   @@index([category])
@@ -121,6 +123,7 @@ model CareerRole {
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
   requiredSkills CareerRoleSkill[]
+  demandSignals  DemandSignal[]
 }
 
 model CareerRoleSkill {
@@ -996,4 +999,67 @@ model ProjectMilestone {
   deliverableDocument Document?        @relation(fields: [deliverableDocumentId], references: [id])
 
   @@index([projectId])
+}
+
+// -----------------------------------------
+// PHASE 9: LABOUR MARKET INTELLIGENCE FOUNDATION
+// -----------------------------------------
+
+enum DemandSourceType {
+  JOB_POSTING
+  EMPLOYER_SURVEY
+  INDUSTRY_CONSULTATION
+  SECTOR_REPORT
+  PLACEMENT_OUTCOME
+  MANUAL_ENTRY
+}
+
+enum DemandSignalStatus {
+  RAW
+  PROCESSED
+  ARCHIVED
+}
+
+model DemandSignal {
+  id              String             @id @default(cuid())
+  sourceType      DemandSourceType
+  sourceReference String?
+  title           String
+  roleId          String?
+  organizationId  String?
+  location        String?
+  description     String?
+  observedAt      DateTime
+  collectedAt     DateTime           @default(now())
+  confidence      Float              @default(1.0)
+  status          DemandSignalStatus @default(RAW)
+  isSynthetic     Boolean            @default(false)
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  role            CareerRole?        @relation(fields: [roleId], references: [id])
+  organization    Organization?      @relation(fields: [organizationId], references: [id])
+  skills          DemandSignalSkill[]
+
+  @@index([sourceType])
+  @@index([roleId])
+  @@index([organizationId])
+  @@index([status])
+}
+
+model DemandSignalSkill {
+  id                  String       @id @default(cuid())
+  demandSignalId      String
+  skillId             String
+  requiredProficiency Int?
+  isMandatory         Boolean      @default(true)
+  evidence            String?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  demandSignal        DemandSignal @relation(fields: [demandSignalId], references: [id], onDelete: Cascade)
+  skill               SkillTaxonomy @relation(fields: [skillId], references: [id])
+
+  @@unique([demandSignalId, skillId])
+  @@index([skillId])
 }

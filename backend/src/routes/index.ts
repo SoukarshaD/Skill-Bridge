@@ -13,6 +13,7 @@ import collaborationsRouter from '../modules/collaborations/collaborations.route
 import assessmentsRouter from '../modules/assessments/assessments.routes';
 import mentorshipRouter from '../modules/mentorship/mentorship.routes';
 import { internshipRouter } from '../modules/internships/internships.routes';
+import lmiRouter from '../modules/lmi/lmi.routes';
 
 const router = Router();
 
@@ -51,5 +52,6 @@ router.use('/certificates', certificatesRouter);
 router.use('/challenges', challengesRouter);
 router.use('/projects', projectsRouter);
 router.use('/career-guidance', careerGuidanceRouter);
+router.use('/lmi', lmiRouter);
 
 export default router;
