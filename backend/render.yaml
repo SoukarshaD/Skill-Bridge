@@ -1,17 +1,24 @@
 services:
   - type: web
     name: academia-industry-api
-    env: node
+    runtime: node
     plan: free
-    rootDir: backend
-    buildCommand: npm install && npm run build
-    startCommand: npm start
+
+    buildCommand: npm install && npx prisma generate && npm run build:backend
+
+    preDeployCommand: npx prisma migrate deploy
+
+    startCommand: npm run start -w backend
+
     envVars:
       - key: NODE_ENV
         value: production
+
       - key: DATABASE_URL
         sync: false
+
       - key: JWT_SECRET
         sync: false
+
       - key: FRONTEND_URL
-        value: https://academia-industry-frontend.vercel.app
+        sync: false
